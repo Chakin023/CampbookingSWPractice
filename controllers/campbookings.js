@@ -1,4 +1,4 @@
-const Campbooking = require('../models/campbooking');
+const Campbooking = require('../models/Campbooking');
 
 //@desc     GET all campbookings
 //@route    GET /api/v1/campbookings
