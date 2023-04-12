@@ -33,6 +33,24 @@ const CampbookingSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add campground region']
     }
+},{
+    toJSON: {virtuals:true},
+    toObject: {virtuals:true}
+});
+
+//Reverse populate with virtuals
+CampbookingSchema.virtual('appointments', {
+    ref : 'Appointment',
+    localField : '_id',
+    foreignField : 'campbooking',
+    justOne : false
+});
+
+//Cascade del
+CampbookingSchema.pre('remove', async function(next){
+    console.log(`Appointments being removed from campbooking ${this._id}`);
+    await this.model('Appointment').deleteMany({campbooking:this._id});
+    next();
 });
 
 module.exports = mongoose.model('Campbooking', CampbookingSchema);
