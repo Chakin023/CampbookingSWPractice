@@ -125,28 +125,27 @@ exports.updateAppointment = async (req, res, next) => {
     }
   };
 
-//@desc Delete appointment
-//@route DELETE /api/v1/appointments/:id
-//@access Private
-exports.deleteAppointment = async (req, res, next) => {
-    try {
-        const appointment = await Appointment.findById(req.params.id);
-        if (!appointment) {
-            return res.status(404).json({ success: false, message: `No appointment with the id of ${req.params.id}` });
-        }
+//@desc     Delete appointment
+//@route    DELETE /api/v1/appointment/:id
+//@access   Private
+exports.deleteAppointment = async (req, res, next)=>{
+  try{
+      const appointment = await Appointment.findById(req.params.id);
 
-        //Make sure user is the appointment owner or an admin
-        if(appointment.user.toString() !== req.user.id && req.user.role !== "admin") {
-             return res.status(401).json({ success:false, message: `User ${req.user.id} is not authorized to delete this appointment` });
-        }
-
-        await appointment.remove();
-        res.status(200).json({
-            success: true,
-            data: {}
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: 'Cannot delete Appointment' });
-    }
+      if(!appointment){
+          return res.status(404).json({success:false, message:`No appointment with the id of ${req.params.id}`});
+      }
+      //Make sure user is the appointment owner
+      if(appointment.user.toString() !== req.user.id && req.user.role !== 'admin'){
+          return res.status(401).json({success:false, message:`User ${req.user.id} is not authorized to delete this appointment`});
+      }
+      await Appointment.findByIdAndRemove(req.params.id);
+      res.status(200).json({
+          success:true,
+          date:{}
+      });
+  } catch(error) {
+      console.log(error);
+      return res.status(500).json({success:false, message:'Cannot delete Appointment'});
+  }
 };
