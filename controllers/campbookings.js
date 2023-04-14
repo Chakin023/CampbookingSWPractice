@@ -1,5 +1,5 @@
 const Campbooking = require('../models/Campbooking');
-const campCenter = require('../models/CampCenter');
+const campCenter = require('../models/campCenter');
 
 //@desc     GET all campbookings
 //@route    GET /api/v1/campbookings
