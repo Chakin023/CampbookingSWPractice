@@ -1,4 +1,5 @@
 const Campbooking = require('../models/Campbooking');
+const campCenter = require('../models/CampCenter');
 
 //@desc     GET all campbookings
 //@route    GET /api/v1/campbookings
@@ -129,4 +130,18 @@ exports.deleteCampbooking = async (req,res,next) => {
         res.status(400).json({success:false});
     }
     
+};
+
+//@desc     GET camp centers
+//@route    GET /api/v1/hospitals/campCenters/
+//@access   Public
+exports.getCampCenters = (req, res, next) => {
+    campCenter.getAll((err, data) => {
+        if(err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occured while retrieving Camp Centers."
+            });
+        else res.send(data);
+    });
 };
