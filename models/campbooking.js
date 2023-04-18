@@ -46,10 +46,23 @@ CampbookingSchema.virtual('appointments', {
     justOne : false
 });
 
+CampbookingSchema.virtual('buses', {
+    ref : 'Bus',
+    localField : '_id',
+    foreignField : 'campbooking',
+    justOne : false
+});
+
 //Cascade del
 CampbookingSchema.pre('remove', async function(next){
     console.log(`Appointments being removed from campbooking ${this._id}`);
     await this.model('Appointment').deleteMany({campbooking:this._id});
+    next();
+});
+
+CampbookingSchema.pre('remove', async function(next){
+    console.log(`Buses being removed from campbooking ${this._id}`);
+    await this.model('Bus').deleteMany({campbooking:this._id});
     next();
 });
 
