@@ -11,7 +11,12 @@ const BusSchema = new mongoose.Schema({
     destination:{
         type: String,
         required: [true, 'Please add bus destination']
-    }
+    },
+});
+
+BusSchema.pre('remove', async function(next){
+    console.log(`Bus being removed from campbooking ${this._id}`);
+    next();
 });
 
 module.exports = mongoose.model('Bus', BusSchema);

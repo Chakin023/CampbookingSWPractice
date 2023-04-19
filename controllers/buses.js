@@ -18,7 +18,7 @@ exports.getBuses = async (req,res,next) => {
     let queryStr = JSON.stringify(reqQuery);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match=>`$${match}`);
     
-    query = Bus.find(JSON.parse(queryStr)).populate('campbooking');
+    query = Bus.find(JSON.parse(queryStr));
 
     //Select Fields
     if(req.query.select) {
@@ -115,18 +115,39 @@ exports.updateBus = async (req,res,next) => {
 //@desc     DELETE bus
 //@route    DELETE /api/v1/buses/:id
 //@access   Private
-exports.deleteBus = async (req,res,next) => {
-    try{
-        const bus = await Bus.findById(req.params.id);
+// exports.deleteBus = async (req,res,next) => {
+//     try{
+//         const bus = await Bus.findById(req.params.id);
 
-        if(!bus)
-            return res.status(400).json({success:false});
+//         if(!bus)
+//             return res.status(400).json({success:false});
     
-        bus.remove();
-        res.status(200).json({success:true, data: {}});
-    } catch(err) {
-        res.status(400).json({success:false});
+//         bus.remove();
+//         res.status(200).json({success:true, data: {}});
+//     } catch(err) {
+//         res.status(400).json({success:false});
+//     }
+    
+// };
+exports.deleteBus = async (req, res, next) => {
+    try {
+      // Check if user is admin
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ success: false, message: 'Not authorized' });
+      }
+  
+      const bus = await Bus.deleteOne({ _id: req.params.id });
+  
+      if (bus.deletedCount === 0) {
+        return res.status(400).json({ success: false });
+      }
+  
+      res.status(200).json({ success: true, data: {} });
+    } catch (err) {
+      res.status(400).json({ success: false });
+      console.log(err)
     }
-    
-};
+  };
+  
+
 

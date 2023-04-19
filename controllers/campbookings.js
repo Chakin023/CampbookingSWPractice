@@ -1,4 +1,4 @@
-const Campbooking = require('../models/Campbooking');
+const Campbooking = require('../models/campbooking');
 const campCenter = require('../models/campCenter');
 
 //@desc     GET all campbookings
