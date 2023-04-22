@@ -40,29 +40,16 @@ const CampbookingSchema = new mongoose.Schema({
 
 //Reverse populate with virtuals
 CampbookingSchema.virtual('appointments', {
-    ref : 'Appointment',
-    localField : '_id',
-    foreignField : 'campbooking',
-    justOne : false
+    ref: 'Appointment',
+    localField: '_id',
+    foreignField: 'campbooking',
+    justOne: false
 });
 
-CampbookingSchema.virtual('buses', {
-    ref : 'Bus',
-    localField : '_id',
-    foreignField : 'campbooking',
-    justOne : false
-});
-
-//Cascade del
-CampbookingSchema.pre('remove', async function(next){
+//Cascade delelte appointments when a hospital is deleted
+CampbookingSchema.pre('deleteOne', async function(next){
     console.log(`Appointments being removed from campbooking ${this._id}`);
-    await this.model('Appointment').deleteMany({campbooking:this._id});
-    next();
-});
-
-CampbookingSchema.pre('remove', async function(next){
-    console.log(`Buses being removed from campbooking ${this._id}`);
-    await this.model('Bus').deleteMany({campbooking:this._id});
+    await this.model('Appointment').deleteMany({campbooking: this._id});
     next();
 });
 

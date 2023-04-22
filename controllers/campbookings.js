@@ -117,20 +117,20 @@ exports.updateCampbooking = async (req,res,next) => {
 //@desc     DELETE campbookings
 //@route    DELETE /api/v1/campbookings/:id
 //@access   Private
-exports.deleteCampbooking = async (req,res,next) => {
-    try{
-        const campbooking = await Campbooking.findById(req.params.id);
-
-        if(!campbooking)
-            return res.status(400).json({success:false});
-        
-        campbooking.remove();
-        res.status(200).json({success:true, data: {}});
-    } catch(err) {
-        res.status(400).json({success:false});
+exports.deleteCampbooking = async (req, res, next) => {
+    try {
+      const campbooking = await Campbooking.findById(req.params.id);
+  
+      if (!campbooking) {
+        return res.status(400).json({ success: false });
+      }
+  
+      await campbooking.deleteOne(); // use deleteOne instead of remove
+      res.status(200).json({ success: true, data: {} });
+    } catch (err) {
+      res.status(400).json({ success: false });
     }
-    
-};
+  };
 
 //@desc     GET camp centers
 //@route    GET /api/v1/hospitals/campCenters/

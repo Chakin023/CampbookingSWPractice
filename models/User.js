@@ -16,6 +16,10 @@ const UserSchema=new mongoose.Schema({
             'Please add a valid email'
         ]
     },
+    tel:{
+        type: String,
+        required:[true, 'Please add user telephone number']
+    },
     role: {
         type:String,
         enum:['user','admin'],
@@ -23,7 +27,7 @@ const UserSchema=new mongoose.Schema({
     },
     password: {
         type:String,
-        required:[true,'Pleas add a password']
+        required:[true,'Please add a password']
         ,
         minlength: 6,
         select: false
@@ -48,7 +52,7 @@ UserSchema.methods.getSignedJwtToken=function(){
         expiresIn: process.env.JWT_EXPIRE
     });
 }
-
+//Match user entered password to hashed password in database
 UserSchema.methods.matchPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);
 }
