@@ -12,6 +12,22 @@ const BusSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add bus destination']
     },
+    license:{
+        type: String,
+        required: [true, 'Please add bus license']
+    },
+    totalSeats:{
+        type: Number,
+        required: [true, 'Please add total number of seats']
+    },
+    bookedSeats:{
+        type: Number,
+        default: 0
+    }
+});
+
+BusSchema.virtual('availableSeats').get(function() {
+  return this.totalSeats - this.bookedSeats;
 });
 
 BusSchema.pre('remove', async function(next){

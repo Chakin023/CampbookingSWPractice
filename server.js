@@ -20,6 +20,8 @@ const campbookings = require('./routes/campbookings');
 const auth = require('./routes/auth');
 const appointments = require('./routes/appointments');
 const buses = require('./routes/buses');
+const busappointments = require('./routes/busappointments');
+
 const { mongo } = require('mongoose');
 
 const app = express();
@@ -57,6 +59,7 @@ app.use('/api/v1/campbookings', campbookings);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/appointments', appointments);
 app.use('/api/v1/buses', buses);
+app.use('/api/v1/busappointments', busappointments);
 
 const PORT = process.env.PORT || 5000;
 

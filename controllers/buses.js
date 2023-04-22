@@ -88,10 +88,14 @@ exports.getBus = async (req,res,next) => {
 //@desc     CREATE new bus
 //@route    POST /api/v1/buses
 //@access   Private
-exports.createBus = async (req,res,next) => {
-    const bus = await Bus.create(req.body);
-    res.status(201).json({success:true, data:bus});
-};
+exports.createBus = async (req, res, next) => {
+    try {
+      const bus = await Bus.create(req.body);
+      res.status(201).json({ success: true, data: bus });
+    } catch (err) {
+      res.status(400).json({ success: false, error: err.message });
+    }
+  };  
 
 //@desc     UPDATE bus
 //@route    PUT /api/v1/buses/:id
