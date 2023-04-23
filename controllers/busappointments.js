@@ -35,7 +35,7 @@ exports.getBusAppointments = async (req, res, next) => {
 };
 
 //@desc Get single appointment
-//@route GET /api/v1/bus-appointments/:id
+//@route GET /api/v1/busappointments/:id
 //@access Public
 exports.getBusAppointment = async (req, res, next) => {
   try {

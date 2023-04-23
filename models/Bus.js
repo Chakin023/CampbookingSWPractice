@@ -40,11 +40,18 @@ BusSchema.virtual('busappointments',{
     justOne: false
 });
 
-//Cascade delelte Bus when a Campbooking is deleted
-BusSchema.pre('remove', async function(next){
-    console.log(`Bus being removed from campbooking ${this._id}`);
-    await this.model('Bus').deleteMany({campbooking: this._id});
+//Cascade delete appointments when a campbooking is deleted
+BusSchema.pre('Remove', async function(next){
+    console.log(`Bus Appointments being removed from bus ${this._id}`);
+    await this.model('BusAppointment').deleteMany({bus: this._id});
     next();
 });
+
+// Add custom remove method to the schema to avoid overwriting the internal remove method
+BusSchema.methods.Remove = async function() {
+    await this.model('Bus').deleteOne({ _id: this._id });
+  };
+  
+
 
 module.exports = mongoose.model('Bus', BusSchema);

@@ -139,12 +139,14 @@ exports.deleteBus = async (req, res, next) => {
       if (req.user.role !== 'admin') {
         return res.status(403).json({ success: false, message: 'Not authorized' });
       }
-  
-      const bus = await Bus.deleteOne({ _id: req.params.id });
-  
-      if (bus.deletedCount === 0) {
-        return res.status(400).json({ success: false });
+
+      const bus = await Bus.findById(req.params.id);
+      if (!bus) {
+          return res.status(404).json({ success: false, message: "Bus not found" });
       }
+
+      // Remove the campbooking document and trigger the pre-hook to delete associated appointments
+      await bus.Remove();
   
       res.status(200).json({ success: true, data: {} });
     } catch (err) {
