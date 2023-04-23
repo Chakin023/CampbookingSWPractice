@@ -46,11 +46,16 @@ CampbookingSchema.virtual('appointments', {
     justOne: false
 });
 
-//Cascade delelte appointments when a hospital is deleted
-CampbookingSchema.pre('deleteOne', async function(next){
+//Cascade delete appointments when a campbooking is deleted
+CampbookingSchema.pre('Remove', async function(next){
     console.log(`Appointments being removed from campbooking ${this._id}`);
     await this.model('Appointment').deleteMany({campbooking: this._id});
     next();
 });
+
+// Add custom remove method to the schema to avoid overwriting the internal remove method
+CampbookingSchema.methods.Remove = async function() {
+  await this.model('Campbooking').deleteOne({ _id: this._id });
+};
 
 module.exports = mongoose.model('Campbooking', CampbookingSchema);
