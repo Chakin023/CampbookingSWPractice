@@ -7,7 +7,7 @@ const Bus = require('../models/Bus');
 exports.getBusAppointments = async (req, res, next) => {
   let query;
 
-  // General users can only see their own appointments
+  // General users can only see their own busappointment
   if (req.user.role !== 'admin') {
     query = BusAppointment.find({ user: req.user.id }).populate({
       path: 'bus',

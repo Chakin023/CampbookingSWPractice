@@ -1,4 +1,5 @@
 const Bus = require('../models/Bus');
+const Campbooking = require('../models/campbooking')
 
 //@desc     GET all buses
 //@route    GET /api/v1/buses
@@ -90,12 +91,19 @@ exports.getBus = async (req,res,next) => {
 //@access   Private
 exports.createBus = async (req, res, next) => {
     try {
+    const campbooking = await Campbooking.findById(req.body.campbooking);
+    if (!campbooking) {
+        return res.status(404).json({ success: false, message: `No campbooking with the id of ${req.body.campbooking}` });
+    } 
+    if(req.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return res.status(401).json({success:false,message:`User ${req.user.id} is not autherized to add this appointment`});
+    }
       const bus = await Bus.create(req.body);
       res.status(201).json({ success: true, data: bus });
     } catch (err) {
       res.status(400).json({ success: false, error: err.message });
     }
-  };  
+};  
 
 //@desc     UPDATE bus
 //@route    PUT /api/v1/buses/:id

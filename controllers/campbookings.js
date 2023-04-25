@@ -5,7 +5,6 @@ const campCenter = require('../models/campCenter');
 //@route    GET /api/v1/campbookings
 //@access   Public
 exports.getCampbookings = async (req,res,next) => {
-    let query;
     //Copy req.ruery
     const reqQuery={...req.query};
 

@@ -61,6 +61,20 @@ CampbookingSchema.pre('Remove', async function(next){
     next();
 });
 
+//Cascade delete buses when a campbooking is deleted
+CampbookingSchema.pre('Remove', async function(next){
+    console.log(`Buses being removed from campbooking ${this._id}`);
+    await this.model('Bus').deleteMany({campbooking: this._id});
+    next();
+});
+
+//Cascade delete appointments when a campbooking is deleted
+CampbookingSchema.pre('Remove', async function(next){
+    console.log(`Bus Appointmet being removed from campbooking ${this._id}`);
+    await this.model('BusAppointment').deleteMany({campbooking: this._id});
+    next();
+});
+
 // Add custom remove method to the schema to avoid overwriting the internal remove method
 CampbookingSchema.methods.Remove = async function() {
   await this.model('Campbooking').deleteOne({ _id: this._id });
