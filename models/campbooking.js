@@ -46,6 +46,14 @@ CampbookingSchema.virtual('appointments', {
     justOne: false
 });
 
+//Reverse populate with virtuals
+CampbookingSchema.virtual('buses', {
+    ref: 'Bus',
+    localField: '_id',
+    foreignField: 'campbooking',
+    justOne: false
+});
+
 //Cascade delete appointments when a campbooking is deleted
 CampbookingSchema.pre('Remove', async function(next){
     console.log(`Appointments being removed from campbooking ${this._id}`);

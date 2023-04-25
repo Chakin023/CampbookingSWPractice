@@ -19,7 +19,7 @@ exports.getCampbookings = async (req,res,next) => {
     let queryStr = JSON.stringify(reqQuery);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match=>`$${match}`);
     
-    query = Campbooking.find(JSON.parse(queryStr)).populate('appointments');
+    query = Campbooking.find(JSON.parse(queryStr)).populate('appointments').populate('buses');
 
     //Select Fields
     if(req.query.select) {

@@ -23,6 +23,10 @@ const BusSchema = new mongoose.Schema({
     bookedSeats:{
         type: Number,
         default: 0
+    },
+    campbooking:{
+        type: mongoose.Schema.ObjectId,
+        required: [true, 'Please add campbooking id']
     }
 }, {
     toJSON: {virtuals:true},
