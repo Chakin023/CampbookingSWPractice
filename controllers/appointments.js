@@ -70,7 +70,7 @@ exports.addAppointment = async (req, res, next) => {
       return res.status(401).json({success:false,message:`User ${req.user.id} is not autherized to add this appointment`});
     }
     // Add user Id to req.body
-    req.body.user = req.user.id;
+    // req.body.user = req.user.id;
     // Check for existing appointments
     const existingAppointments = await Appointment.find({ user: req.user.id });
     // If the user is not an admin, they can only create 3 appointments.

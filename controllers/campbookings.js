@@ -5,7 +5,6 @@ const campCenter = require('../models/campCenter');
 //@route    GET /api/v1/campbookings
 //@access   Public
 exports.getCampbookings = async (req,res,next) => {
-    //Copy req.ruery
     const reqQuery={...req.query};
 
     //Field to exclude
@@ -18,7 +17,8 @@ exports.getCampbookings = async (req,res,next) => {
     let queryStr = JSON.stringify(reqQuery);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match=>`$${match}`);
     
-    query = Campbooking.find(JSON.parse(queryStr)).populate('appointments').populate('buses');
+    // query = Campbooking.find(JSON.parse(queryStr)).populate('appointments').populate('buses');
+    query = Campbooking.find(JSON.parse(queryStr)).populate('buses');
 
     //Select Fields
     if(req.query.select) {
@@ -74,7 +74,7 @@ exports.getCampbookings = async (req,res,next) => {
 //@access   Public
 exports.getCampbooking = async (req,res,next) => {
     try{
-        const campbooking = await Campbooking.findById(req.params.id);
+        const campbooking = await Campbooking.findById(req.params.id).populate('buses');
 
         if(!campbooking){
             return res.status(400).json({success:false});
