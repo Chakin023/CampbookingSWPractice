@@ -68,16 +68,19 @@ exports.addBusAppointment = async (req, res, next) => {
       if (!bus) {
           return res.status(404).json({ success: false, message: `No bus with the id of ${req.params.busId}` });
       }
+      if(req.body.user.toString() !== req.user.id && req.user.role !== 'admin'){
+        return res.status(401).json({success:false,message:`User ${req.user.id} is not autherized to add this bus appointment`});
+      }
 
       // Add user Id to req.body
-      req.body.user = req.user.id;
+      // req.body.user = req.user.id;
       // Check for existing bus appointments
       const existingAppointments = await BusAppointment.find({ user: req.user.id });
       // If the user is not an admin, they can only create 3 appointments.
       if (existingAppointments.length >= 3 && req.user.role !== 'admin') {
           return res.status(400).json({
               success: false,
-              message: `The user with ID ${req.user.id} has already made 3 appointments.`,
+              message: `The user with ID ${req.user.id} has already made 3 bus appointments.`,
           });
       }
 
@@ -98,7 +101,7 @@ exports.addBusAppointment = async (req, res, next) => {
       });
   } catch (error) {
       console.log(error);
-      return res.status(500).json({ success: false, message: "Cannot create bus appointment" });
+      return res.status(500).json({ success: false, message: `User ${req.body.user} is not found` });
   }
 };
 
